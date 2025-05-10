@@ -19,7 +19,7 @@ import {
   Tooltip,
   Dialog,
   DialogContent,
-  Container
+  Container,
 } from '@mui/material';
 import {
   Star as StarIcon,
@@ -48,7 +48,6 @@ import {
 } from '../../utils/helpers';
 import MovieCard from './MovieCard';
 
-// TabPanel component for tab content
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
 
@@ -71,11 +70,11 @@ const MovieDetails = () => {
     selectMovieDetails
   );
   const favorites = useAppSelector(selectFavorites);
-  
+
   const [activeTab, setActiveTab] = useState(0);
   const [trailerOpen, setTrailerOpen] = useState(false);
   const [selectedTrailer, setSelectedTrailer] = useState(null);
-  
+
   if (loading || !movie) {
     return (
       <Box
@@ -100,24 +99,20 @@ const MovieDetails = () => {
       </Box>
     );
   }
-  
-  // Check if movie is in favorites
+
   const isFavorite = favorites.some((fav) => fav.id === movie.id);
-  
-  // Get backdrop and poster paths
+
   const backdropPath = movie.backdrop_path
     ? apiConfig.originalImage(movie.backdrop_path)
     : '';
   const posterPath = movie.poster_path
     ? apiConfig.w500Image(movie.poster_path)
     : '/static/no-poster.jpg';
-    
-  // Get trailer
+
   const trailer = videos?.results?.find(
     (video) => video.type === 'Trailer' && video.site === 'YouTube'
   );
-  
-  // Handle favorite toggle
+
   const handleFavoriteToggle = () => {
     if (isFavorite) {
       dispatch(removeFromFavorites(movie.id));
@@ -125,27 +120,24 @@ const MovieDetails = () => {
       dispatch(addToFavorites(movie));
     }
   };
-  
-  // Handle tab change
+
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
-  
-  // Handle trailer play
+
   const handlePlayTrailer = () => {
     if (trailer) {
       setSelectedTrailer(trailer);
       setTrailerOpen(true);
     }
   };
-  
-  // Prepare cast and crew
+
   const cast = credits?.cast?.slice(0, 10) || [];
   const director = credits?.crew?.find((person) => person.job === 'Director');
-  
+
   return (
     <>
-      {/* Backdrop section */}
+      {/* Backdrop Section */}
       <Box
         sx={{
           position: 'relative',
@@ -178,43 +170,58 @@ const MovieDetails = () => {
           <Container maxWidth="lg">
             <Grid container spacing={4}>
               <Grid item xs={12} md={8}>
-                <Typography variant="h3" component="h1" sx={{ fontWeight: 700 }}>
+                <Typography
+                  variant="h3"
+                  component="h1"
+                  sx={{
+                    fontWeight: 700,
+                    color: '#ff0000', // Red title
+                    textShadow: '2px 2px 6px rgba(0, 0, 0, 0.8)',
+                  }}
+                >
                   {movie.title}
                 </Typography>
-                
+
                 {movie.tagline && (
-                  <Typography variant="h6" sx={{ mt: 1, mb: 2, fontStyle: 'italic' }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      mt: 1,
+                      mb: 2,
+                      fontStyle: 'italic',
+                      color: '#fff',
+                    }}
+                  >
                     {movie.tagline}
                   </Typography>
                 )}
-                
+
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   {movie.vote_average > 0 && (
                     <Tooltip title={`${movie.vote_count} votes`}>
                       <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
-                        <StarIcon sx={{ color: getRatingColor(movie.vote_average), mr: 0.5 }} />
-                        <Typography>
-                          {formatRating(movie.vote_average)}
-                        </Typography>
+                        <StarIcon
+                          sx={{
+                            color: getRatingColor(movie.vote_average),
+                            mr: 0.5,
+                          }}
+                        />
+                        <Typography>{formatRating(movie.vote_average)}</Typography>
                       </Box>
                     </Tooltip>
                   )}
-                  
+
                   <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
                     <CalendarIcon sx={{ fontSize: 'small', mr: 0.5 }} />
-                    <Typography>
-                      {formatReleaseDate(movie.release_date)}
-                    </Typography>
+                    <Typography>{formatReleaseDate(movie.release_date)}</Typography>
                   </Box>
-                  
+
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <ScheduleIcon sx={{ fontSize: 'small', mr: 0.5 }} />
-                    <Typography>
-                      {formatRuntime(movie.runtime)}
-                    </Typography>
+                    <Typography>{formatRuntime(movie.runtime)}</Typography>
                   </Box>
                 </Box>
-                
+
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
                   {movie.genres?.map((genre) => (
                     <Chip
@@ -222,32 +229,42 @@ const MovieDetails = () => {
                       label={genre.name}
                       size="small"
                       sx={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                        backgroundColor: 'rgba(255, 0, 0, 0.2)', // Red tint
                         color: 'white',
                       }}
                     />
                   ))}
                 </Box>
-                
+
                 <Box sx={{ display: 'flex', gap: 2 }}>
                   {trailer && (
                     <Button
                       variant="contained"
                       startIcon={<PlayArrowIcon />}
                       onClick={handlePlayTrailer}
+                      sx={{
+                        backgroundColor: '#ff0000',
+                        color: '#fff',
+                        '&:hover': {
+                          backgroundColor: '#cc0000',
+                        },
+                      }}
                     >
                       Watch Trailer
                     </Button>
                   )}
-                  
+
                   <Button
                     variant={isFavorite ? 'contained' : 'outlined'}
-                    color={isFavorite ? 'secondary' : 'primary'}
                     startIcon={isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
                     onClick={handleFavoriteToggle}
                     sx={{
-                      borderColor: 'white',
-                      color: isFavorite ? 'white' : 'white',
+                      borderColor: isFavorite ? '#ff0000' : '#fff',
+                      color: isFavorite ? '#fff' : '#fff',
+                      '&:hover': {
+                        borderColor: '#ff0000',
+                        backgroundColor: isFavorite ? '#cc0000' : 'rgba(255, 0, 0, 0.1)',
+                      },
                     }}
                   >
                     {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
@@ -259,10 +276,10 @@ const MovieDetails = () => {
         </Box>
       </Box>
 
-      {/* Details content */}
+      {/* Details Content */}
       <Container maxWidth="lg">
         <Grid container spacing={4}>
-          {/* Left column - Poster and quick info */}
+          {/* Left Column */}
           <Grid item xs={12} md={3}>
             <Paper elevation={2} sx={{ mb: 3 }}>
               <Box
@@ -272,20 +289,20 @@ const MovieDetails = () => {
                 sx={{ width: '100%', borderRadius: 1 }}
               />
             </Paper>
-            
-            <Paper sx={{ p: 2, mb: 3 }}>
+
+            <Paper sx={{ p: 2, mb: 3, backgroundColor: '#111', color: '#fff' }}>
               <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
                 Information
               </Typography>
-              <Divider sx={{ mb: 2 }} />
-              
+              <Divider sx={{ mb: 2, borderColor: '#ff0000' }} />
+
               <Box sx={{ mb: 1 }}>
                 <Typography variant="body2" color="text.secondary">
                   Status
                 </Typography>
                 <Typography variant="body1">{movie.status}</Typography>
               </Box>
-              
+
               {movie.budget > 0 && (
                 <Box sx={{ mb: 1 }}>
                   <Typography variant="body2" color="text.secondary">
@@ -300,7 +317,7 @@ const MovieDetails = () => {
                   </Typography>
                 </Box>
               )}
-              
+
               {movie.revenue > 0 && (
                 <Box sx={{ mb: 1 }}>
                   <Typography variant="body2" color="text.secondary">
@@ -315,7 +332,7 @@ const MovieDetails = () => {
                   </Typography>
                 </Box>
               )}
-              
+
               {movie.production_companies?.length > 0 && (
                 <Box sx={{ mb: 1 }}>
                   <Typography variant="body2" color="text.secondary">
@@ -328,7 +345,7 @@ const MovieDetails = () => {
                   </Typography>
                 </Box>
               )}
-              
+
               {movie.homepage && (
                 <Box sx={{ mt: 2 }}>
                   <Button
@@ -339,6 +356,13 @@ const MovieDetails = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     fullWidth
+                    sx={{
+                      borderColor: '#ff0000',
+                      color: '#ff0000',
+                      '&:hover': {
+                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                      },
+                    }}
                   >
                     Official Website
                   </Button>
@@ -346,29 +370,31 @@ const MovieDetails = () => {
               )}
             </Paper>
           </Grid>
-          
-          {/* Right column - Tabs with details */}
+
+          {/* Right Column */}
           <Grid item xs={12} md={9}>
             <Box sx={{ width: '100%' }}>
-              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs 
-                  value={activeTab} 
-                  onChange={handleTabChange} 
+              <Box sx={{ borderBottom: 1, borderColor: '#ff0000' }}>
+                <Tabs
+                  value={activeTab}
+                  onChange={handleTabChange}
                   aria-label="movie details tabs"
+                  textColor="inherit"
+                  indicatorColor="primary"
                 >
                   <Tab label="Overview" />
                   <Tab label="Cast" />
                   {similar?.length > 0 && <Tab label="Similar Movies" />}
                 </Tabs>
               </Box>
-              
-              {/* Overview tab */}
+
+              {/* Overview Tab */}
               <TabPanel value={activeTab} index={0}>
                 <Typography variant="h5" gutterBottom>
                   Overview
                 </Typography>
                 <Typography paragraph>{movie.overview}</Typography>
-                
+
                 {director && (
                   <Box sx={{ mt: 3 }}>
                     <Typography variant="subtitle1" gutterBottom>
@@ -378,8 +404,8 @@ const MovieDetails = () => {
                   </Box>
                 )}
               </TabPanel>
-              
-              {/* Cast tab */}
+
+              {/* Cast Tab */}
               <TabPanel value={activeTab} index={1}>
                 <Typography variant="h5" gutterBottom>
                   Cast
@@ -406,8 +432,8 @@ const MovieDetails = () => {
                   ))}
                 </List>
               </TabPanel>
-              
-              {/* Similar movies tab */}
+
+              {/* Similar Movies Tab */}
               <TabPanel value={activeTab} index={2}>
                 <Typography variant="h5" gutterBottom>
                   Similar Movies
@@ -424,8 +450,8 @@ const MovieDetails = () => {
           </Grid>
         </Grid>
       </Container>
-      
-      {/* Trailer dialog */}
+
+      {/* Trailer Dialog */}
       <Dialog
         open={trailerOpen}
         onClose={() => setTrailerOpen(false)}
@@ -449,7 +475,7 @@ const MovieDetails = () => {
           >
             <CloseIcon />
           </IconButton>
-          
+
           {selectedTrailer && (
             <Box
               sx={{

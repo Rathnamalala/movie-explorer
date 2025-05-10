@@ -1,12 +1,11 @@
 import React from 'react';
-import { Box, Typography, Container, Button, Grid, useTheme } from '@mui/material';
+import { Box, Typography, Container, Button, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../redux/hooks';
 import { selectTrendingMovies } from '../../redux/slices/movieSlice';
 import apiConfig from '../../api/apiConfig';
 
 const HeroSection = () => {
-  const theme = useTheme();
   const navigate = useNavigate();
   const { data: trendingMovies, loading } = useAppSelector(selectTrendingMovies);
 
@@ -48,12 +47,13 @@ const HeroSection = () => {
     <Box
       sx={{
         position: 'relative',
-        height: { xs: '60vh', md: '70vh' },
+        height: { xs: '70vh', md: '80vh' },
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'center',
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -61,7 +61,7 @@ const HeroSection = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9))',
           zIndex: 1,
         },
       }}
@@ -69,38 +69,44 @@ const HeroSection = () => {
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={8}>
+            {/* Movie Title */}
             <Typography
               component="h1"
               variant="h2"
-              color="white"
+              color="#ff0000" // Red title
               gutterBottom
               sx={{
-                fontWeight: 700,
-                textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                fontWeight: 800,
+                textShadow: '4px 4px 8px rgba(0,0,0,0.8)',
+                letterSpacing: '0.1rem',
               }}
             >
               {featuredMovie.title}
             </Typography>
+
+            {/* Movie Overview */}
             <Typography
               variant="h6"
               color="white"
               paragraph
               sx={{
-                textShadow: '1px 1px 3px rgba(0,0,0,0.5)',
+                textShadow: '2px 2px 6px rgba(0,0,0,0.8)',
                 mb: 4,
                 maxWidth: '800px',
+                lineHeight: 1.8,
               }}
             >
               {featuredMovie.overview?.length > 200
                 ? `${featuredMovie.overview.substring(0, 200)}...`
                 : featuredMovie.overview}
             </Typography>
+
+            {/* Action Buttons */}
             <Box
               sx={{
-                '& > *': {
-                  mr: 2,
-                  mb: 2
-                },
+                display: 'flex',
+                gap: 2,
+                flexWrap: 'wrap',
               }}
             >
               <Button
@@ -108,9 +114,17 @@ const HeroSection = () => {
                 size="large"
                 onClick={handleMovieClick}
                 sx={{
-                  backgroundColor: theme.palette.primary.main,
+                  backgroundColor: '#ff0000', // Red button
+                  color: '#fff',
+                  fontWeight: 'bold',
+                  px: 4,
+                  py: 1.5,
+                  borderRadius: '8px',
+                  textTransform: 'none',
+                  boxShadow: '0 4px 10px rgba(255, 0, 0, 0.5)',
                   '&:hover': {
-                    backgroundColor: theme.palette.primary.dark,
+                    backgroundColor: '#cc0000', // Darker red on hover
+                    boxShadow: '0 6px 15px rgba(255, 0, 0, 0.7)',
                   },
                 }}
               >
@@ -120,11 +134,17 @@ const HeroSection = () => {
                 variant="outlined"
                 size="large"
                 sx={{
-                  color: 'white',
-                  borderColor: 'white',
+                  color: '#fff',
+                  borderColor: '#fff',
+                  fontWeight: 'bold',
+                  px: 4,
+                  py: 1.5,
+                  borderRadius: '8px',
+                  textTransform: 'none',
                   '&:hover': {
-                    borderColor: 'white',
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    borderColor: '#ff0000',
+                    color: '#ff0000',
+                    backgroundColor: 'rgba(255, 0, 0, 0.1)',
                   },
                 }}
               >

@@ -21,21 +21,34 @@ const MainLayout = () => {
           flexDirection: 'column',
           minHeight: '100vh',
           width: '100%',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          backgroundColor: themeMode === 'dark' ? '#000' : '#fff', // Black for dark mode, white for light mode
+          color: themeMode === 'dark' ? '#fff' : '#000', // White text for dark mode, black text for light mode
         }}
       >
+        {/* Header */}
         <Header />
+
+        {/* Main Content */}
         <Box
           component="main"
           sx={{
             flexGrow: 1,
-            width: '100%', 
+            width: '100%',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            backgroundColor: themeMode === 'dark' ? '#111' : '#f9f9f9', // Slightly lighter black for dark mode
+            color: themeMode === 'dark' ? '#fff' : '#000',
+            padding: { xs: 2, md: 4 }, // Responsive padding
+            boxShadow: themeMode === 'dark'
+              ? 'inset 0 0 10px rgba(255, 0, 0, 0.5)' // Subtle red glow for dark mode
+              : 'none',
           }}
         >
           <Outlet />
         </Box>
+
+        {/* Footer */}
         <Footer />
       </Box>
     </ThemeProvider>

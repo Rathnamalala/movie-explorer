@@ -6,61 +6,115 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        py: 3,
+        py: 4,
         px: 2,
         mt: 'auto',
         width: '100%',
-        backgroundColor: (theme) =>
-          theme.palette.mode === 'light'
-            ? theme.palette.grey[200]
-            : theme.palette.grey[800],
+        backgroundColor: '#000', // Black background
+        color: '#fff', // White text
+        borderTop: '2px solid #ff0000', // Red top border
       }}
     >
-      <Container maxWidth="lg" sx={{ width: '100%' }}>
-        <Grid container spacing={3}>
+      <Container maxWidth="lg">
+        <Grid container spacing={4}>
+          {/* Brand Section */}
           <Grid item xs={12} sm={4}>
-            <Typography variant="h6" color="text.primary" gutterBottom>
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: 'bold',
+                color: '#ff0000', // Red brand name
+                mb: 2,
+              }}
+            >
               Movie Explorer
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{ color: '#ccc' }}>
               Discover your favorite films with our comprehensive movie database.
             </Typography>
           </Grid>
+
+          {/* Quick Links Section */}
           <Grid item xs={12} sm={4}>
-            <Typography variant="h6" color="text.primary" gutterBottom>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 'bold',
+                color: '#ff0000', // Red section title
+                mb: 2,
+              }}
+            >
               Quick Links
             </Typography>
-            <Link href="/" color="inherit" sx={{ display: 'block', mb: 1 }}>
+            <Link
+              href="/"
+              sx={{
+                display: 'block',
+                color: '#fff',
+                mb: 1,
+                textDecoration: 'none',
+                '&:hover': { color: '#ff0000' }, // Red hover effect
+              }}
+            >
               Home
             </Link>
-            <Link href="/favorites" color="inherit" sx={{ display: 'block', mb: 1 }}>
+            <Link
+              href="/favorites"
+              sx={{
+                display: 'block',
+                color: '#fff',
+                mb: 1,
+                textDecoration: 'none',
+                '&:hover': { color: '#ff0000' }, // Red hover effect
+              }}
+            >
               Favorites
             </Link>
           </Grid>
+
+          {/* About Section */}
           <Grid item xs={12} sm={4}>
-            <Typography variant="h6" color="text.primary" gutterBottom>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 'bold',
+                color: '#ff0000', // Red section title
+                mb: 2,
+              }}
+            >
               About
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            <Typography variant="body2" sx={{ color: '#ccc', mb: 2 }}>
               This product uses the TMDb API but is not endorsed or certified by TMDb.
             </Typography>
             <Box
               component="img"
               src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg"
               alt="TMDb logo"
-              sx={{ width: 100 }}
+              sx={{
+                width: 100,
+                filter: 'brightness(0) invert(1)', // Invert logo for dark background
+              }}
             />
           </Grid>
         </Grid>
-        <Box mt={2}>
+
+        {/* Bottom Section */}
+        <Box mt={4} textAlign="center">
           <Typography
             variant="body2"
-            color="text.secondary"
-            align="center"
+            sx={{
+              color: '#ccc',
+              '& a': {
+                color: '#ff0000',
+                textDecoration: 'none',
+                '&:hover': { textDecoration: 'underline' },
+              },
+            }}
           >
             {'© '}
             {new Date().getFullYear()}{' '}
-            <Link color="inherit" href="/">
+            <Link href="/" sx={{ color: '#ff0000' }}>
               Movie Explorer
             </Link>
             {'. All rights reserved.'}

@@ -21,7 +21,6 @@ import {
   Brightness7 as LightModeIcon,
   AccountCircle,
 } from '@mui/icons-material';
-import { alpha, styled } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
   selectIsAuthenticated,
@@ -30,49 +29,9 @@ import {
 } from '../../redux/slices/authSlice';
 import { toggleTheme, selectThemeMode } from '../../redux/slices/uiSlice';
 import { searchMovies, clearSearchResults } from '../../redux/slices/movieSlice';
+import '../../index.css'; // Import global styles
+import { useTheme } from '@mui/material/styles';
 
-// Styled components
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-      '&:focus': {
-        width: '30ch',
-      },
-    },
-  },
-}));
 
 const Header = () => {
   const navigate = useNavigate();
@@ -80,7 +39,7 @@ const Header = () => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const user = useAppSelector(selectUser);
   const themeMode = useAppSelector(selectThemeMode);
-  
+   const theme = useTheme();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -133,7 +92,13 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static"
+      sx={{
+        backgroundColor: theme.palette.header.background, // Dynamic background color
+        color: theme.palette.header.text, // Dynamic text color
+        boxShadow: 'none',
+        borderBottom: `2px solid ${theme.palette.primary.main}`, // Red border
+      }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Logo for large screens */}
@@ -142,14 +107,7 @@ const Header = () => {
             noWrap
             component={RouterLink}
             to="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontWeight: 700,
-              letterSpacing: '.1rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
+            className="header-logo"
           >
             MOVIE EXPLORER
           </Typography>
@@ -162,7 +120,7 @@ const Header = () => {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
+              className="header-menu-button"
             >
               <MenuIcon />
             </IconButton>
@@ -180,9 +138,7 @@ const Header = () => {
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
+              className="mobile-menu"
             >
               {pages.map((page) => (
                 <MenuItem
@@ -191,6 +147,7 @@ const Header = () => {
                     handleCloseNavMenu();
                     navigate(page.path);
                   }}
+                  className="mobile-menu-item"
                 >
                   <Typography textAlign="center">{page.title}</Typography>
                 </MenuItem>
@@ -204,15 +161,8 @@ const Header = () => {
             noWrap
             component={RouterLink}
             to="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontWeight: 700,
-              letterSpacing: '.1rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
+            className="header-logo"
+            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
           >
             MOVIE EXPLORER
           </Typography>
@@ -225,7 +175,7 @@ const Header = () => {
                 component={RouterLink}
                 to={page.path}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                className="button"
               >
                 {page.title}
               </Button>
@@ -233,33 +183,31 @@ const Header = () => {
           </Box>
 
           {/* Search bar */}
-          <form onSubmit={handleSearch}>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </Search>
+          <form onSubmit={handleSearch} className="header-search">
+            <div className="header-search-icon">
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="header-search-input"
+            />
           </form>
 
           {/* Theme toggle */}
           <IconButton
-            sx={{ ml: 1 }}
             onClick={() => dispatch(toggleTheme())}
-            color="inherit"
+            className="header-theme-toggle"
           >
             {themeMode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
           </IconButton>
 
           {/* User menu */}
-          <Box sx={{ flexGrow: 0, ml: 2 }}>
+          <Box className="header-user-menu">
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton onClick={handleOpenUserMenu} className="header-user-avatar">
                 {isAuthenticated && user ? (
                   <Avatar alt={user.name} src="/static/avatar.jpg" />
                 ) : (
@@ -268,7 +216,6 @@ const Header = () => {
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: '45px' }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -287,6 +234,7 @@ const Header = () => {
                 <MenuItem
                   key={setting}
                   onClick={() => handleUserMenuClick(setting)}
+                  className="header-user-menu-item"
                 >
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
