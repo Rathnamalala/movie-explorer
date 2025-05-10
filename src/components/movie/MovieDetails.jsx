@@ -141,7 +141,7 @@ const MovieDetails = () => {
       <Box
         sx={{
           position: 'relative',
-          height: { xs: '30vh', sm: '50vh', md: '70vh' },
+          height: { xs: '40vh', sm: '50vh', md: '70vh' }, // Adjust height for mobile
           backgroundImage: `url(${backdropPath})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -171,7 +171,7 @@ const MovieDetails = () => {
             <Grid container spacing={4}>
               <Grid item xs={12} md={8}>
                 <Typography
-                  variant="h3"
+                  variant="h4" // Smaller font size for mobile
                   component="h1"
                   sx={{
                     fontWeight: 700,
@@ -184,7 +184,7 @@ const MovieDetails = () => {
 
                 {movie.tagline && (
                   <Typography
-                    variant="h6"
+                    variant="subtitle1"
                     sx={{
                       mt: 1,
                       mb: 2,
@@ -196,10 +196,18 @@ const MovieDetails = () => {
                   </Typography>
                 )}
 
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: { xs: 'column', sm: 'row' }, // Stack vertically on mobile
+                    alignItems: { xs: 'flex-start', sm: 'center' },
+                    mb: 2,
+                    gap: 1,
+                  }}
+                >
                   {movie.vote_average > 0 && (
                     <Tooltip title={`${movie.vote_count} votes`}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mr: { sm: 3 } }}>
                         <StarIcon
                           sx={{
                             color: getRatingColor(movie.vote_average),
@@ -211,7 +219,7 @@ const MovieDetails = () => {
                     </Tooltip>
                   )}
 
-                  <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mr: { sm: 3 } }}>
                     <CalendarIcon sx={{ fontSize: 'small', mr: 0.5 }} />
                     <Typography>{formatReleaseDate(movie.release_date)}</Typography>
                   </Box>
@@ -236,7 +244,13 @@ const MovieDetails = () => {
                   ))}
                 </Box>
 
-                <Box sx={{ display: 'flex', gap: 2 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: { xs: 'column', sm: 'row' }, // Stack buttons vertically on mobile
+                    gap: 2,
+                  }}
+                >
                   {trailer && (
                     <Button
                       variant="contained"
@@ -286,7 +300,12 @@ const MovieDetails = () => {
                 component="img"
                 src={posterPath}
                 alt={movie.title}
-                sx={{ width: '100%', borderRadius: 1 }}
+                sx={{
+                  width: '100%',
+                  borderRadius: 1,
+                  height: { xs: 'auto', sm: '400px' }, // Adjust height for mobile
+                  objectFit: 'cover',
+                }}
               />
             </Paper>
 

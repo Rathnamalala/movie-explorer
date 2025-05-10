@@ -29,9 +29,7 @@ import {
 } from '../../redux/slices/authSlice';
 import { toggleTheme, selectThemeMode } from '../../redux/slices/uiSlice';
 import { searchMovies, clearSearchResults } from '../../redux/slices/movieSlice';
-import '../../index.css'; // Import global styles
 import { useTheme } from '@mui/material/styles';
-
 
 const Header = () => {
   const navigate = useNavigate();
@@ -39,7 +37,7 @@ const Header = () => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const user = useAppSelector(selectUser);
   const themeMode = useAppSelector(selectThemeMode);
-   const theme = useTheme();
+  const theme = useTheme();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -51,9 +49,7 @@ const Header = () => {
   ];
 
   // User menu settings
-  const settings = isAuthenticated
-    ? ['Profile', 'Account', 'Logout']
-    : ['Login'];
+  const settings = isAuthenticated ? ['Profile', 'Logout'] : ['Login'];
 
   // Handlers
   const handleOpenNavMenu = (event) => {
@@ -92,13 +88,15 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="static"
+    <AppBar
+      position="static"
       sx={{
         backgroundColor: theme.palette.header.background, // Dynamic background color
         color: theme.palette.header.text, // Dynamic text color
         boxShadow: 'none',
         borderBottom: `2px solid ${theme.palette.primary.main}`, // Red border
-      }}>
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Logo for large screens */}
@@ -107,7 +105,13 @@ const Header = () => {
             noWrap
             component={RouterLink}
             to="/"
-            className="header-logo"
+            sx={{
+              fontWeight: 700,
+              letterSpacing: '0.1rem',
+              color: theme.palette.primary.main,
+              textDecoration: 'none',
+              display: { xs: 'none', md: 'flex' }, // Hidden on small screens
+            }}
           >
             MOVIE EXPLORER
           </Typography>
@@ -120,7 +124,7 @@ const Header = () => {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              className="header-menu-button"
+              sx={{ color: theme.palette.primary.main }}
             >
               <MenuIcon />
             </IconButton>
@@ -138,7 +142,9 @@ const Header = () => {
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              className="mobile-menu"
+              sx={{
+                display: { xs: 'block', md: 'none' }, // Visible only on small screens
+              }}
             >
               {pages.map((page) => (
                 <MenuItem
@@ -147,7 +153,6 @@ const Header = () => {
                     handleCloseNavMenu();
                     navigate(page.path);
                   }}
-                  className="mobile-menu-item"
                 >
                   <Typography textAlign="center">{page.title}</Typography>
                 </MenuItem>
@@ -161,8 +166,14 @@ const Header = () => {
             noWrap
             component={RouterLink}
             to="/"
-            className="header-logo"
-            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
+            sx={{
+              fontWeight: 700,
+              letterSpacing: '0.1rem',
+              color: theme.palette.primary.main,
+              textDecoration: 'none',
+              flexGrow: 1,
+              display: { xs: 'flex', md: 'none' }, // Hidden on large screens
+            }}
           >
             MOVIE EXPLORER
           </Typography>
@@ -175,7 +186,12 @@ const Header = () => {
                 component={RouterLink}
                 to={page.path}
                 onClick={handleCloseNavMenu}
-                className="button"
+                sx={{
+                  color: theme.palette.header.text,
+                  '&:hover': {
+                    color: theme.palette.primary.main,
+                  },
+                }}
               >
                 {page.title}
               </Button>
@@ -183,35 +199,61 @@ const Header = () => {
           </Box>
 
           {/* Search bar */}
-          <form onSubmit={handleSearch} className="header-search">
-            <div className="header-search-icon">
-              <SearchIcon />
-            </div>
+          <form
+            onSubmit={handleSearch}
+            style={{
+              position: 'relative',
+              borderRadius: '4px',
+              backgroundColor: 'rgba(255, 0, 0, 0.15)',
+              marginRight: '16px',
+              width: '100%',
+              maxWidth: '300px',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <SearchIcon
+              style={{
+                position: 'absolute',
+                left: '8px',
+                color: theme.palette.primary.main,
+              }}
+            />
             <InputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="header-search-input"
+              sx={{
+                color: 'inherit',
+                padding: '8px 8px 8px 40px',
+                width: '100%',
+                fontSize: '0.9rem',
+              }}
             />
           </form>
 
           {/* Theme toggle */}
           <IconButton
             onClick={() => dispatch(toggleTheme())}
-            className="header-theme-toggle"
+            sx={{
+              color: theme.palette.header.text,
+              '&:hover': {
+                color: theme.palette.primary.main,
+              },
+            }}
           >
             {themeMode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
           </IconButton>
 
           {/* User menu */}
-          <Box className="header-user-menu">
+          <Box sx={{ ml: 2 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} className="header-user-avatar">
+              <IconButton onClick={handleOpenUserMenu}>
                 {isAuthenticated && user ? (
                   <Avatar alt={user.name} src="/static/avatar.jpg" />
                 ) : (
-                  <AccountCircle />
+                  <AccountCircle sx={{ color: theme.palette.header.text }} />
                 )}
               </IconButton>
             </Tooltip>
@@ -234,7 +276,6 @@ const Header = () => {
                 <MenuItem
                   key={setting}
                   onClick={() => handleUserMenuClick(setting)}
-                  className="header-user-menu-item"
                 >
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
