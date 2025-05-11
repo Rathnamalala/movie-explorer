@@ -178,25 +178,10 @@ const Header = () => {
             MOVIE EXPLORER
           </Typography>
 
-          {/* Desktop menu */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page.title}
-                component={RouterLink}
-                to={page.path}
-                onClick={handleCloseNavMenu}
-                sx={{
-                  color: theme.palette.header.text,
-                  '&:hover': {
-                    color: theme.palette.primary.main,
-                  },
-                }}
-              >
-                {page.title}
-              </Button>
-            ))}
-          </Box>
+          {/* Spacer to push menu items to the right */}
+          <Box sx={{ flexGrow: 1 }} />
+
+          
 
           {/* Search bar */}
           <form
@@ -232,6 +217,25 @@ const Header = () => {
               }}
             />
           </form>
+          {/* Desktop menu */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            {pages.map((page) => (
+              <Button
+                key={page.title}
+                component={RouterLink}
+                to={page.path}
+                onClick={handleCloseNavMenu}
+                sx={{
+                  color: theme.palette.header.text,
+                  '&:hover': {
+                    color: theme.palette.primary.main,
+                  },
+                }}
+              >
+                {page.title}
+              </Button>
+            ))}
+          </Box>
 
           {/* Theme toggle */}
           <IconButton

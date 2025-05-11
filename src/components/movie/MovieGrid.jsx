@@ -140,13 +140,7 @@ const MovieGrid = ({ title, movies, loading, error, infiniteScroll = false }) =>
           justifyContent: 'center', 
           mt: 4 
         }}>
-          <Button 
-            variant="contained" 
-            onClick={fetchMoreMovies}
-            disabled={isLoading}
-          >
-            {isLoading ? 'Loading...' : 'Load More'}
-          </Button>
+          
         </Box>
       )}
     </Box>
