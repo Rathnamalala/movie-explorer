@@ -8,7 +8,5 @@ export default defineConfig({
   build: {
     outDir: 'dist', // Output directory for the build
   },
-  server: {
-    port: 3000,
-  },
+  
 });
